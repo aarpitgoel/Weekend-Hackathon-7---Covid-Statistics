@@ -13,6 +13,8 @@ let ob = data;
 let recoveredPatients = 0;
 let totalActiveCases = 0;
 let totalDeaths = 0;
+let rateValue = [];
+let mortalityValue = [];
 //let totalHotspotStates = 0;
 //console.log(ob.data.length);
 
@@ -21,6 +23,8 @@ for(let i=0 ; i<ob.data.length ; i++){
     recoveredPatients += ob.data[i].recovered;
     totalActiveCases += (ob.data[i].infected - ob.data[i].recovered);
     totalDeaths += ob.data[i].death;
+    rateValue[i] = ((ob.data[i].infected - ob.data[i].recovered) / ob.data[i].infected);
+    mortalityValue[i] = (ob.data[i].death/ob.data[i].infected);
 }
 
 //console.log(recoveredPatients);
@@ -35,8 +39,47 @@ app.get('/totalActive' , (req,res) => {
     res.send(obj);
 })
 
+
 app.get('/totalDeath' , (req,res) => {
     let obj = {data: {_id:"total", death:totalDeaths}};
+    res.send(obj);
+})
+
+//console.log(rateValue);
+
+let hotspotStatesArr = []
+for(let i = 0 ; i<ob.data.length ; i++){
+    //console.log("in");
+    if(rateValue[i] > 0.1){
+        //console.log("inin");
+        let newObj = {
+            state : ob.data[i].state,
+            rate: rateValue[i]
+        }
+        hotspotStatesArr.push(newObj);
+    }
+}
+
+app.get('/hotspotStates' , (req,res) => {
+    let obj = {data: hotspotStatesArr}
+    res.send(obj);
+})
+
+let healthyStatesArr = []
+for(let i = 0 ; i<ob.data.length ; i++){
+    //console.log("in");
+    if(mortalityValue[i] < 0.005){
+        //console.log("inin");
+        let newObj = {
+            state : ob.data[i].state,
+            mortality : mortalityValue[i]
+        }
+        healthyStatesArr.push(newObj);
+    }
+}
+
+app.get('/healthyStates' , (req,res) => {
+    let obj = {data: healthyStatesArr}
     res.send(obj);
 })
 
