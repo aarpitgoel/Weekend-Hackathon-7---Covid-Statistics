@@ -10,12 +10,28 @@ const { connection } = require('./connector')
 const data=require('./data');
 
 let recoveredPatients = 0;
+let totalActiveCases = 0;
+let totalDeaths = 0;
+//let totalHotspotStates = 0;
+
 for(let i=0 ; i<data.length ; i++){
-    recoveredPatients +=data[i].recovered;
+    recoveredPatients += data[i].recovered;
+    totalActiveCases += (data[i].infected - data[i].recovered);
+    totalDeaths += data[i].death;
 }
 
 app.get('/totalRecovered',(req,res)=>{   
-    let obj={data:{_id: "total", recovered:recoveredPatients}};
+    let obj={data:{_id: "total", recovered: recoveredPatients}};
+    res.send(obj);
+})
+
+app.get('/totalActive' , (req,res) => {
+    let obj = {data: {_id: "total", active:totalActiveCases}};
+    res.send(obj);
+})
+
+app.get('/totalDeath' , (req,res) => {
+    let obj = {data: {_id:"total", death:totalDeaths}};
     res.send(obj);
 })
 
