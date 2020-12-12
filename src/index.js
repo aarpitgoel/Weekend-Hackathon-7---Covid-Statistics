@@ -9,16 +9,21 @@ app.use(express.json());
 const { connection } = require('./connector')
 const data=require('./data');
 
+let ob = data;
 let recoveredPatients = 0;
 let totalActiveCases = 0;
 let totalDeaths = 0;
 //let totalHotspotStates = 0;
+//console.log(ob.data.length);
 
-for(let i=0 ; i<data.length ; i++){
-    recoveredPatients += data[i].recovered;
-    totalActiveCases += (data[i].infected - data[i].recovered);
-    totalDeaths += data[i].death;
+for(let i=0 ; i<ob.data.length ; i++){
+    //console.log("in");
+    recoveredPatients += ob.data[i].recovered;
+    totalActiveCases += (ob.data[i].infected - ob.data[i].recovered);
+    totalDeaths += ob.data[i].death;
 }
+
+//console.log(recoveredPatients);
 
 app.get('/totalRecovered',(req,res)=>{   
     let obj={data:{_id: "total", recovered: recoveredPatients}};
