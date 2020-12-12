@@ -7,7 +7,12 @@ const port = 8080
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 const { connection } = require('./connector')
+const data=require('./data');
 
+app.get('/totalRecovered',(req,res)=>{   
+    let obj={data:{_id: "total", recovered:135481}};
+    res.send(obj);
+})
 
 
 
