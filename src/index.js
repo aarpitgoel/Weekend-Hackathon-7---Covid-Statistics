@@ -23,8 +23,8 @@ for(let i=0 ; i<ob.data.length ; i++){
     recoveredPatients += ob.data[i].recovered;
     totalActiveCases += (ob.data[i].infected - ob.data[i].recovered);
     totalDeaths += ob.data[i].death;
-    rateValue[i] = ((ob.data[i].infected - ob.data[i].recovered) / ob.data[i].infected);
-    mortalityValue[i] = (ob.data[i].death/ob.data[i].infected);
+    rateValue[i] = parseFloat(((ob.data[i].infected - ob.data[i].recovered) / ob.data[i].infected).toFixed(5));
+    mortalityValue[i] = parseFloat((ob.data[i].death/ob.data[i].infected).toFixed(5));
 }
 
 //console.log(recoveredPatients);
@@ -64,6 +64,7 @@ app.get('/hotspotStates' , (req,res) => {
     let obj = {data: hotspotStatesArr}
     res.send(obj);
 })
+
 
 let healthyStatesArr = []
 for(let i = 0 ; i<ob.data.length ; i++){
